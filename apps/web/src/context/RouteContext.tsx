@@ -16,6 +16,7 @@ export interface HistoryItem {
   data: string
   origem: string
   destino: string
+  paradas: string
   distancia_km: string
   tempo_h: string
   eixos: number
@@ -26,6 +27,8 @@ interface State {
   origin: RoutePoint | null
   destination: RoutePoint | null
   axles: number
+  routeOptions: RouteResult[]
+  selectedRouteIdx: number
   route: RouteResult | null
   freights: FreightResult[]
   history: HistoryItem[]
@@ -39,13 +42,16 @@ type Action =
   | { type: 'SET_AXLES'; payload: number }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'SET_ROUTE'; route: RouteResult; freights: FreightResult[] }
+  | { type: 'SET_ROUTE_OPTIONS'; routeOptions: RouteResult[]; freights: FreightResult[] }
+  | { type: 'SELECT_ROUTE'; idx: number; freights: FreightResult[] }
   | { type: 'ADD_HISTORY'; payload: HistoryItem }
 
 const initialState: State = {
   origin: null,
   destination: null,
   axles: 5,
+  routeOptions: [],
+  selectedRouteIdx: 0,
   route: null,
   freights: [],
   history: [],
@@ -53,16 +59,39 @@ const initialState: State = {
   error: null,
 }
 
+const clearRoute = { routeOptions: [], selectedRouteIdx: 0, route: null, freights: [] }
+
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case 'SET_ORIGIN':      return { ...state, origin: action.payload, route: null, freights: [] }
-    case 'SET_DESTINATION': return { ...state, destination: action.payload, route: null, freights: [] }
-    case 'SET_AXLES':       return { ...state, axles: action.payload }
-    case 'SET_LOADING':     return { ...state, loading: action.payload }
-    case 'SET_ERROR':       return { ...state, error: action.payload }
-    case 'SET_ROUTE':       return { ...state, route: action.route, freights: action.freights }
-    case 'ADD_HISTORY':     return { ...state, history: [action.payload, ...state.history] }
-    default:                return state
+    case 'SET_ORIGIN':
+      return { ...state, origin: action.payload, ...clearRoute }
+    case 'SET_DESTINATION':
+      return { ...state, destination: action.payload, ...clearRoute }
+    case 'SET_AXLES':
+      return { ...state, axles: action.payload }
+    case 'SET_LOADING':
+      return { ...state, loading: action.payload }
+    case 'SET_ERROR':
+      return { ...state, error: action.payload }
+    case 'SET_ROUTE_OPTIONS':
+      return {
+        ...state,
+        routeOptions: action.routeOptions,
+        selectedRouteIdx: 0,
+        route: action.routeOptions[0] ?? null,
+        freights: action.freights,
+      }
+    case 'SELECT_ROUTE':
+      return {
+        ...state,
+        selectedRouteIdx: action.idx,
+        route: state.routeOptions[action.idx] ?? null,
+        freights: action.freights,
+      }
+    case 'ADD_HISTORY':
+      return { ...state, history: [action.payload, ...state.history] }
+    default:
+      return state
   }
 }
 

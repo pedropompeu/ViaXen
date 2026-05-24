@@ -7,24 +7,24 @@ export interface RoutePoint {
 export interface RouteResult {
   distance: number // meters
   duration: number // seconds
-  geometry: any // GeoJSON
+  geometry: any   // GeoJSON LineString
 }
 
-export async function getRoute(points: RoutePoint[]): Promise<RouteResult> {
+export async function getRoute(points: RoutePoint[]): Promise<RouteResult[]> {
   const coords = points.map(p => `${p.lng},${p.lat}`).join(';')
-  const url = `https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=geojson`
-  
+  const url = `https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=geojson&alternatives=3`
+
   const response = await fetch(url)
+  if (!response.ok) throw new Error(`OSRM retornou ${response.status}`)
   const data = await response.json()
-  
-  if (data.code !== 'Ok') {
-    throw new Error('Erro ao calcular rota: ' + data.code)
+
+  if (data.code !== 'Ok' || !data.routes?.length) {
+    throw new Error('Rota não encontrada para os pontos informados')
   }
-  
-  const route = data.routes[0]
-  return {
-    distance: route.distance,
-    duration: route.duration,
-    geometry: route.geometry
-  }
+
+  return data.routes.map((r: any) => ({
+    distance: r.distance,
+    duration: r.duration,
+    geometry: r.geometry,
+  }))
 }

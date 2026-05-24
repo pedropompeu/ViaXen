@@ -1,9 +1,11 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   plugins: [
+    tailwindcss(),
     react(),
     VitePWA({
       registerType: 'autoUpdate',
@@ -16,19 +18,17 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB para os demais assets
       },
       manifest: {
-        name: 'RotaCerta',
-        short_name: 'RotaCerta',
-        description: 'Planejamento Logístico e Cálculo de Frete',
-        theme_color: '#020617',
-        background_color: '#020617',
+        name: 'VIAXEN',
+        short_name: 'VIAXEN',
+        description: 'Route Intelligence Platform — Cálculo de Rota e Frete',
+        theme_color: '#0D1117',
+        background_color: '#080C10',
         display: 'standalone',
         icons: [
-          {
-            src: 'favicon.svg',
-            sizes: 'any',
-            type: 'image/svg+xml',
-            purpose: 'any'
-          }
+          { src: 'icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: 'icon-maskable-192.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+          { src: 'icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ]
       }
     })
