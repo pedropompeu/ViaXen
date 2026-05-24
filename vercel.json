@@ -1,8 +1,16 @@
 {
-  "buildCommand": "cd apps/web && npm install && npm run build",
+  "buildCommand": "pnpm --filter web build",
   "outputDirectory": "apps/web/dist",
+  "installCommand": "pnpm install --frozen-lockfile",
   "framework": null,
   "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
+        { "key": "Cross-Origin-Embedder-Policy", "value": "require-corp" }
+      ]
+    },
     {
       "source": "/assets/(.*).wasm",
       "headers": [
