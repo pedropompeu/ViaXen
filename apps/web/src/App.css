@@ -1,20 +1,28 @@
 .leaflet-container {
-  background: #0D1117 !important;
+  background: #E8E0D0 !important;
   font-family: var(--font-body) !important;
 }
+/* Mapa claro — tiles OSM naturais, sem filtro de inversão */
 .leaflet-tile-pane {
-  filter: invert(100%) hue-rotate(180deg) brightness(85%) contrast(85%) saturate(70%);
+  filter: brightness(102%) saturate(85%);
 }
 .leaflet-control-attribution {
-  background: rgba(13,17,23,0.85) !important;
+  background: rgba(254, 252, 247, 0.90) !important;
   color: var(--vx-text-muted) !important;
   font-size: 10px !important;
+  border-top: 1px solid var(--vx-subtle) !important;
 }
-.leaflet-control-attribution a { color: var(--vx-cyan) !important; }
+.leaflet-control-attribution a { color: var(--vx-cyan-dark) !important; }
+.leaflet-control-zoom {
+  border: 1px solid #DDD5C4 !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.10) !important;
+}
 .leaflet-control-zoom a {
   background: var(--vx-surface) !important;
   color: var(--vx-text-secondary) !important;
-  border-color: var(--vx-cyan-border) !important;
+  border-bottom-color: #DDD5C4 !important;
 }
 .leaflet-control-zoom a:hover {
   background: var(--vx-graphite) !important;

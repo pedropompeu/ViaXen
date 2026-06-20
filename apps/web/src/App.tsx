@@ -32,10 +32,10 @@ function App() {
 
   const mapCenter: [number, number] = origin ? [origin.lat, origin.lng] : [-23.75, -46.5]
   const mapMarkers = [
-    origin ? { position: [origin.lat, origin.lng] as [number, number], label: origin.label } : null,
-    ...stopSlots.filter(s => s.point).map(s => ({ position: [s.point!.lat, s.point!.lng] as [number, number], label: s.point!.label })),
-    destination ? { position: [destination.lat, destination.lng] as [number, number], label: destination.label } : null,
-  ].filter(Boolean) as { position: [number, number]; label: string }[]
+    origin ? { position: [origin.lat, origin.lng] as [number, number], label: origin.label, type: 'origin' as const } : null,
+    ...stopSlots.filter(s => s.point).map(s => ({ position: [s.point!.lat, s.point!.lng] as [number, number], label: s.point!.label, type: 'stop' as const })),
+    destination ? { position: [destination.lat, destination.lng] as [number, number], label: destination.label, type: 'destination' as const } : null,
+  ].filter(Boolean) as { position: [number, number]; label: string; type: 'origin' | 'stop' | 'destination' }[]
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-body)' }}>

@@ -1,0 +1,30 @@
+projeto: ViaXen
+slug: viaxen
+descricao: SaaS B2B de inteligência de rotas rodoviárias com estimativa de frete baseada na tabela ANTT (Resolução 5820/2019)
+status: ativo
+criado_em: 2026-05-24
+adicionado_holding: 2026-06-20
+repositorio: https://github.com/pedropompeu/ViaXen
+deploy: https://viaxen.vercel.app
+
+stack:
+  frontend: React 19 + TypeScript + Vite 5 + Tailwind CSS v4
+  mapas: Leaflet + react-leaflet
+  roteamento: OSRM (API pública)
+  geocodificacao: Nominatim / OpenStreetMap
+  pwa: vite-plugin-pwa + Workbox
+  monorepo: pnpm workspaces
+  deploy: Vercel
+
+funcionalidades_mvp:
+  - Cálculo de rotas com visualização no mapa (OpenStreetMap)
+  - 3 rotas alternativas com comparação de distância e tempo
+  - Paradas intermediárias
+  - Estimativa de frete por tipo de carga (Geral, Granel, Frigorificado, Perigoso, Conteinerizado)
+  - KPIs em tempo real (distância, duração, consumo de diesel)
+  - Exportação CSV
+  - PWA instalável e funcional offline
+
+historico:
+  - 2026-05-24: MVP concluído (Sprint 1 + 2), rebrand de RotaCerta para ViaXen, deploy na Vercel
+  - 2026-06-20: Adicionado à holding

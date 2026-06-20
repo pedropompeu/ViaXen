@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { Search, Loader2 } from 'lucide-react'
 
 export interface AddressResult {
   label: string
@@ -66,8 +67,20 @@ export function AddressInput({ placeholder, onSelect }: Props) {
   return (
     <div style={{ position: 'relative' }}>
       <div style={{ position: 'relative' }}>
+        {/* Ícone de busca à esquerda */}
+        <div style={{
+          position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)',
+          color: 'var(--vx-muted)', pointerEvents: 'none',
+          display: 'flex', alignItems: 'center',
+        }}>
+          <Search size={13} strokeWidth={2} />
+        </div>
+
         <input
           type="text"
+          aria-label={placeholder}
+          aria-autocomplete="list"
+          aria-expanded={open}
           value={query}
           onChange={e => { setQuery(e.target.value); setSelected('') }}
           placeholder={placeholder}
@@ -75,35 +88,40 @@ export function AddressInput({ placeholder, onSelect }: Props) {
             width: '100%',
             background: 'var(--vx-surface)',
             border: '1px solid var(--vx-cyan-border)',
-            borderRadius: '8px',
+            borderRadius: 8,
             color: 'var(--vx-text-primary)',
             fontFamily: 'var(--font-body)',
-            fontSize: '13px',
-            padding: '9px 32px 9px 12px',
-            height: '38px',
-            outline: 'none',
+            fontSize: 13,
+            padding: '9px 32px 9px 30px',
+            height: 38,
             transition: 'border-color 150ms var(--ease-fast)',
             boxSizing: 'border-box',
           }}
-          onFocus={e => (e.target.style.borderColor = 'rgba(0,229,255,0.5)')}
+          onFocus={e => (e.target.style.borderColor = 'var(--vx-cyan)')}
           onBlur={e => (e.target.style.borderColor = 'var(--vx-cyan-border)')}
         />
+
+        {/* Spinner de loading à direita */}
         {loading && (
           <div style={{
             position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)',
-            width: 12, height: 12, border: '2px solid var(--vx-cyan)',
-            borderTopColor: 'transparent', borderRadius: '50%',
+            color: 'var(--vx-cyan)',
+            display: 'flex', alignItems: 'center',
             animation: 'spin 0.7s linear infinite',
-          }} />
+          }}>
+            <Loader2 size={13} strokeWidth={2} />
+          </div>
         )}
       </div>
+
       {open && (
         <ul style={{
           position: 'absolute', zIndex: 9999, marginTop: 4, width: '100%',
-          background: 'var(--vx-graphite)',
-          border: '1px solid rgba(0,229,255,0.2)',
+          background: 'var(--vx-card)',
+          border: '1px solid var(--vx-subtle)',
           borderRadius: 8, overflow: 'hidden', listStyle: 'none',
-          padding: 0, margin: 0, boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+          padding: 0, margin: '4px 0 0',
+          boxShadow: '0 8px 24px rgba(120,85,35,0.15)',
         }}>
           {suggestions.map((s, i) => (
             <li
@@ -112,11 +130,11 @@ export function AddressInput({ placeholder, onSelect }: Props) {
               style={{
                 padding: '9px 14px', fontSize: 12, cursor: 'pointer',
                 color: 'var(--vx-text-secondary)',
-                borderBottom: i < suggestions.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                borderBottom: i < suggestions.length - 1 ? '1px solid var(--vx-graphite)' : 'none',
                 transition: 'background 120ms',
                 fontFamily: 'var(--font-body)',
               }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'var(--vx-subtle)')}
+              onMouseEnter={e => (e.currentTarget.style.background = 'var(--vx-graphite)')}
               onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
             >
               {s.label}

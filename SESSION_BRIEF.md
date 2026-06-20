@@ -21,14 +21,14 @@ Sprint 0  ✅ Analytics (Plausible) + Política de privacidade
 Sprint 1  ⏳ Play Store via TWA — BLOQUEADO aguardando rebrand
 Sprint 2  → Supabase: auth opcional + histórico persistido
 Sprint 3  → Freemium + migrar OSRM/Nominatim (APIs públicas têm restrição comercial)
-Sprint 4  → Componentizar App.tsx (hoje: 544 linhas) + API B2B (se métricas OK)
+Sprint 4  ✅ Componentizar App.tsx (560 → 82 linhas) — antecipado em 2026-06-20
 ```
 
 **App nativo (RN/Flutter) descartado** — TWA suficiente para caso de uso atual.
 
 ## Sprint 0 — CONCLUÍDO
 
-- **Plausible Analytics**: script em `index.html` + `src/services/analytics.ts` com 4 eventos customizados (`calcular-rota`, `exportar-csv`, `selecionar-alternativa`, `adicionar-parada`). **Ativar**: criar conta em plausible.io → "Add website" → `via-xen.vercel.app`.
+- **Plausible Analytics**: script em `index.html` + `src/services/analytics.ts` com 4 eventos customizados (`calcular-rota`, `exportar-csv`, `selecionar-alternativa`, `adicionar-parada`). Conta ativada em 2026-06-20 — dashboard em plausible.io.
 - **Política de Privacidade**: `/privacidade.html` (estática, tema ViaXen) + link no footer. Cobre Plausible sem cookies, dados de sessão, OSRM/Nominatim, direitos LGPD.
 
 ## Sprint 1 — EM ANDAMENTO (bloqueado)
@@ -47,6 +47,13 @@ Decisão: **light theme** (fundo branco/off-white) + sistema de texturas táteis
 3. Gerar APK no **pwabuilder.com** → package `com.viaxen.app`
 4. Preencher SHA-256 real no `assetlinks.json` e fazer deploy
 5. Conta Google Play ($25 taxa única) → submeter `.aab`
+
+## Sprint 4 — CONCLUÍDO ANTECIPADO (2026-06-20)
+
+- **Componentização do App.tsx**: 560 → 82 linhas
+- Extraídos: `hooks/useStops`, `hooks/useRouteCalculator`, `utils/format`
+- Novos componentes: `Topbar`, `ErrorToast`, `RouteForm`, `RouteAlternatives`, `FreightTable`, `KpiCards`, `AppFooter`
+- Deploy em produção: `via-xen.vercel.app` (commit `40268de`)
 
 ## Riscos Ativos
 

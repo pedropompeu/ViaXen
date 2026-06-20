@@ -1,0 +1,396 @@
+/* ═══════════════════════════════════════════════════════════════════
+   ViaXen Design Tokens — Conceito XENITH
+   BRAND.md v1.0 · 2026-06-20
+   Arquitetura: Primitivo → Semântico → Componente
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────────
+   CAMADA 1 — PRIMITIVOS
+   Valores brutos. Nunca referenciar diretamente em componentes.
+   ────────────────────────────────────────────────────────────────── */
+:root {
+  /* Escala de neutros (slate) */
+  --primitive-slate-950: #0A0C10;
+  --primitive-slate-900: #12151B;
+  --primitive-slate-850: #1C2030;
+  --primitive-slate-800: #252A36;
+  --primitive-slate-700: #3A4154;
+  --primitive-slate-600: #525B72;
+  --primitive-slate-400: #8B93A8;
+  --primitive-slate-100: #F0F2F7;
+  --primitive-slate-050: #F8F9FC;
+
+  /* Escala de amber/laranja (accent) */
+  --primitive-amber-600: #CC6200;
+  --primitive-amber-500: #FF7A00;
+  --primitive-amber-400: #FF9130;
+  --primitive-amber-300: #FFB060;
+  --primitive-amber-a10: rgba(255, 122,   0, 0.10);
+  --primitive-amber-a15: rgba(255, 122,   0, 0.15);
+  --primitive-amber-a20: rgba(255, 122,   0, 0.20);
+
+  /* Escala de blue (rota alt 1) */
+  --primitive-blue-600:  #1D4ED8;
+  --primitive-blue-500:  #3B82F6;
+  --primitive-blue-400:  #60A5FA;
+  --primitive-blue-a10:  rgba( 59, 130, 246, 0.10);
+  --primitive-blue-a15:  rgba( 59, 130, 246, 0.15);
+
+  /* Escala de violet (rota alt 2) */
+  --primitive-violet-600: #7C3AED;
+  --primitive-violet-500: #8B5CF6;
+  --primitive-violet-400: #A78BFA;
+  --primitive-violet-a10: rgba(139,  92, 246, 0.10);
+  --primitive-violet-a15: rgba(139,  92, 246, 0.15);
+
+  /* Semânticas base */
+  --primitive-green-500: #22C55E;
+  --primitive-green-a10: rgba( 34, 197,  94, 0.10);
+  --primitive-yellow-500: #F59E0B;
+  --primitive-yellow-a10: rgba(245, 158,  11, 0.10);
+  --primitive-red-500:   #EF4444;
+  --primitive-red-a10:   rgba(239,  68,  68, 0.10);
+
+  /* Overlay */
+  --primitive-overlay-85: rgba(10, 12, 16, 0.85);
+  --primitive-overlay-60: rgba(10, 12, 16, 0.60);
+
+  /* Tipografia */
+  --primitive-font-geist:      'Geist', 'DM Sans', 'Inter', system-ui, sans-serif;
+  --primitive-font-geist-mono: 'Geist Mono', 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Escala tipográfica */
+  --primitive-text-xs:   10px;
+  --primitive-text-sm:   12px;
+  --primitive-text-base: 14px;
+  --primitive-text-md:   15px;
+  --primitive-text-lg:   16px;
+  --primitive-text-xl:   18px;
+  --primitive-text-2xl:  20px;
+  --primitive-text-3xl:  24px;
+  --primitive-text-4xl:  32px;
+  --primitive-text-5xl:  40px;
+  --primitive-text-6xl:  48px;
+
+  /* Espaçamento */
+  --primitive-space-1:  4px;
+  --primitive-space-2:  8px;
+  --primitive-space-3:  12px;
+  --primitive-space-4:  16px;
+  --primitive-space-5:  20px;
+  --primitive-space-6:  24px;
+  --primitive-space-8:  32px;
+  --primitive-space-10: 40px;
+  --primitive-space-12: 48px;
+  --primitive-space-16: 64px;
+
+  /* Border radius */
+  --primitive-radius-sm:  4px;
+  --primitive-radius-md:  6px;
+  --primitive-radius-lg:  8px;
+  --primitive-radius-xl:  10px;
+  --primitive-radius-2xl: 12px;
+  --primitive-radius-full: 9999px;
+
+  /* Easing */
+  --primitive-ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --primitive-ease-smooth:  cubic-bezier(0.16, 1, 0.3, 1);
+  --primitive-ease-out:     cubic-bezier(0, 0, 0.2, 1);
+
+  /* Duração */
+  --primitive-duration-fast:   120ms;
+  --primitive-duration-normal: 200ms;
+  --primitive-duration-slow:   300ms;
+
+  /* Z-index */
+  --primitive-z-below:   -1;
+  --primitive-z-base:    0;
+  --primitive-z-raised:  10;
+  --primitive-z-dropdown: 100;
+  --primitive-z-sticky:  200;
+  --primitive-z-overlay: 300;
+  --primitive-z-modal:   400;
+  --primitive-z-toast:   500;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   CAMADA 2 — SEMÂNTICOS
+   Significado de uso. Referenciar nos componentes.
+   ────────────────────────────────────────────────────────────────── */
+:root {
+  /* Superfícies */
+  --bg-canvas:   var(--primitive-slate-950);  /* body, base de tudo */
+  --bg-surface:  var(--primitive-slate-900);  /* cards, sidebar, panels */
+  --bg-elevated: var(--primitive-slate-850);  /* modais, dropdowns, tooltips */
+  --bg-muted:    var(--primitive-slate-800);  /* inputs, dividers, separadores */
+  --bg-overlay:  var(--primitive-overlay-85); /* backdrop de modal/drawer */
+
+  /* Accent */
+  --accent:          var(--primitive-amber-500);   /* accent primário — CTAs, ativo, selecionado */
+  --accent-hover:    var(--primitive-amber-400);   /* hover de accent */
+  --accent-active:   var(--primitive-amber-600);   /* pressed/active */
+  --accent-muted:    var(--primitive-amber-a10);   /* bg de badge, highlight, card selecionado */
+  --accent-subtle:   var(--primitive-amber-a15);   /* hover de card com accent */
+
+  /* Texto */
+  --text-primary:   var(--primitive-slate-100);    /* títulos, valores principais */
+  --text-secondary: var(--primitive-slate-400);    /* labels, descrições, metadados */
+  --text-muted:     var(--primitive-slate-600);    /* placeholders, disabled, hints */
+  --text-accent:    var(--primitive-amber-500);    /* texto com cor de accent */
+  --text-inverted:  var(--primitive-slate-950);    /* texto em bg claro (botão primário) */
+
+  /* Bordas */
+  --border-default:  var(--primitive-slate-800);   /* bordas de card, dividers */
+  --border-emphasis: var(--primitive-slate-700);   /* input focus, card hover */
+  --border-accent:   var(--primitive-amber-a20);   /* borda de elemento com accent */
+
+  /* Feedback semântico */
+  --status-success:     var(--primitive-green-500);
+  --status-success-bg:  var(--primitive-green-a10);
+  --status-warning:     var(--primitive-yellow-500);
+  --status-warning-bg:  var(--primitive-yellow-a10);
+  --status-error:       var(--primitive-red-500);
+  --status-error-bg:    var(--primitive-red-a10);
+  --status-info:        var(--primitive-blue-500);
+  --status-info-bg:     var(--primitive-blue-a10);
+
+  /* Rotas — Leaflet polilinha e RouteCard */
+  --route-primary-color:     var(--primitive-amber-500);   /* rota recomendada */
+  --route-primary-color-bg:  var(--primitive-amber-a10);
+  --route-alt1-color:        var(--primitive-blue-500);    /* alternativa 1 */
+  --route-alt1-color-bg:     var(--primitive-blue-a10);
+  --route-alt2-color:        var(--primitive-violet-500);  /* alternativa 2 */
+  --route-alt2-color-bg:     var(--primitive-violet-a10);
+  --route-waypoint-color:    var(--primitive-slate-100);   /* marcadores de parada */
+
+  /* Tipografia */
+  --font-display: var(--primitive-font-geist);
+  --font-body:    var(--primitive-font-geist);
+  --font-mono:    var(--primitive-font-geist-mono);
+
+  /* Layout */
+  --sidebar-width: 340px;
+  --topbar-height: 56px;
+
+  /* Transições */
+  --transition-fast:   var(--primitive-duration-fast)   var(--primitive-ease-default);
+  --transition-normal: var(--primitive-duration-normal) var(--primitive-ease-default);
+  --transition-slow:   var(--primitive-duration-slow)   var(--primitive-ease-smooth);
+
+  /* Z-index nomeados */
+  --z-dropdown: var(--primitive-z-dropdown);
+  --z-sticky:   var(--primitive-z-sticky);
+  --z-overlay:  var(--primitive-z-overlay);
+  --z-modal:    var(--primitive-z-modal);
+  --z-toast:    var(--primitive-z-toast);
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   CAMADA 3 — COMPONENTES
+   Tokens específicos de cada componente.
+   ────────────────────────────────────────────────────────────────── */
+:root {
+  /* ─── Button ─── */
+  /* Primary */
+  --btn-primary-bg:             var(--accent);
+  --btn-primary-bg-hover:       var(--accent-hover);
+  --btn-primary-bg-active:      var(--accent-active);
+  --btn-primary-text:           var(--text-inverted);
+  --btn-primary-border:         transparent;
+  --btn-primary-shadow-focus:   0 0 0 3px var(--primitive-amber-a20);
+
+  /* Secondary */
+  --btn-secondary-bg:           var(--bg-muted);
+  --btn-secondary-bg-hover:     var(--bg-elevated);
+  --btn-secondary-text:         var(--text-primary);
+  --btn-secondary-border:       var(--border-default);
+  --btn-secondary-border-hover: var(--border-emphasis);
+
+  /* Ghost */
+  --btn-ghost-bg:               transparent;
+  --btn-ghost-bg-hover:         var(--bg-muted);
+  --btn-ghost-text:             var(--text-secondary);
+  --btn-ghost-text-hover:       var(--text-primary);
+  --btn-ghost-border:           transparent;
+
+  /* Destructive */
+  --btn-destructive-bg:           var(--primitive-red-a10);
+  --btn-destructive-bg-hover:     rgba(239, 68, 68, 0.20);
+  --btn-destructive-text:         var(--status-error);
+  --btn-destructive-border:       rgba(239, 68, 68, 0.30);
+  --btn-destructive-border-hover: rgba(239, 68, 68, 0.50);
+
+  /* Disabled (todos os tipos) */
+  --btn-disabled-bg:     var(--bg-muted);
+  --btn-disabled-text:   var(--text-muted);
+  --btn-disabled-border: var(--border-default);
+  --btn-disabled-cursor: not-allowed;
+
+  /* Tamanhos */
+  --btn-sm-height:   32px;
+  --btn-sm-padding:  0 12px;
+  --btn-sm-font:     var(--primitive-text-sm);
+  --btn-md-height:   40px;
+  --btn-md-padding:  0 16px;
+  --btn-md-font:     var(--primitive-text-base);
+  --btn-lg-height:   48px;
+  --btn-lg-padding:  0 20px;
+  --btn-lg-font:     var(--primitive-text-lg);
+
+  /* ─── Input ─── */
+  --input-bg:              var(--bg-muted);
+  --input-bg-hover:        var(--bg-elevated);
+  --input-bg-focus:        var(--bg-surface);
+  --input-text:            var(--text-primary);
+  --input-placeholder:     var(--text-muted);
+  --input-border:          var(--border-default);
+  --input-border-hover:    var(--border-emphasis);
+  --input-border-focus:    var(--accent);
+  --input-border-error:    var(--status-error);
+  --input-shadow-focus:    0 0 0 3px var(--primitive-amber-a10);
+  --input-shadow-error:    0 0 0 3px var(--primitive-red-a10);
+  --input-height:          40px;
+  --input-padding:         0 12px;
+  --input-font:            var(--primitive-text-base);
+  --input-radius:          var(--primitive-radius-lg);
+  --input-label-font:      var(--primitive-text-xs);
+  --input-label-weight:    700;
+  --input-label-tracking:  0.08em;
+  --input-label-transform: uppercase;
+  --input-label-color:     var(--text-secondary);
+
+  /* ─── Card ─── */
+  --card-bg:             var(--bg-surface);
+  --card-border:         var(--border-default);
+  --card-radius:         var(--primitive-radius-xl);
+  --card-padding:        20px;
+  --card-shadow:         none;
+
+  /* Card interativo */
+  --card-interactive-bg-hover:     var(--bg-elevated);
+  --card-interactive-border-hover: var(--border-emphasis);
+  --card-interactive-shadow-hover: none;
+  --card-selected-bg:              var(--accent-muted);
+  --card-selected-border:          var(--border-accent);
+  --card-selected-shadow:          0 0 0 1px var(--primitive-amber-a20);
+
+  /* ─── Badge ─── */
+  --badge-height:          20px;
+  --badge-padding:         0 8px;
+  --badge-font:            var(--primitive-text-xs);
+  --badge-weight:          700;
+  --badge-tracking:        0.08em;
+  --badge-transform:       uppercase;
+  --badge-radius:          var(--primitive-radius-full);
+  --badge-success-bg:      var(--primitive-green-a10);
+  --badge-success-text:    var(--status-success);
+  --badge-success-border:  rgba(34, 197, 94, 0.20);
+  --badge-warning-bg:      var(--primitive-yellow-a10);
+  --badge-warning-text:    var(--status-warning);
+  --badge-warning-border:  rgba(245, 158, 11, 0.20);
+  --badge-error-bg:        var(--primitive-red-a10);
+  --badge-error-text:      var(--status-error);
+  --badge-error-border:    rgba(239, 68, 68, 0.20);
+  --badge-info-bg:         var(--primitive-blue-a10);
+  --badge-info-text:       var(--status-info);
+  --badge-info-border:     rgba(59, 130, 246, 0.20);
+  --badge-neutral-bg:      var(--bg-muted);
+  --badge-neutral-text:    var(--text-secondary);
+  --badge-neutral-border:  var(--border-default);
+
+  /* ─── RouteCard ─── */
+  --route-card-radius:   var(--primitive-radius-lg);
+  --route-card-padding:  10px 12px;
+  --route-card-bg:       var(--bg-muted);
+  --route-card-border:   var(--border-default);
+
+  /* Indicador lateral (4px) */
+  --route-card-indicator-width: 4px;
+
+  /* Rota principal (amber) */
+  --route-card-primary-bg:          var(--route-primary-color-bg);
+  --route-card-primary-border:      rgba(255, 122, 0, 0.40);
+  --route-card-primary-indicator:   var(--route-primary-color);
+  --route-card-primary-text:        var(--text-primary);
+  --route-card-primary-data-color:  var(--route-primary-color);
+  --route-card-primary-shadow:      0 0 0 1px rgba(255, 122, 0, 0.20);
+
+  /* Rota alt 1 (blue) */
+  --route-card-alt1-bg:             var(--route-alt1-color-bg);
+  --route-card-alt1-border:         rgba(59, 130, 246, 0.40);
+  --route-card-alt1-indicator:      var(--route-alt1-color);
+  --route-card-alt1-data-color:     var(--route-alt1-color);
+  --route-card-alt1-shadow:         0 0 0 1px rgba(59, 130, 246, 0.20);
+
+  /* Rota alt 2 (violet) */
+  --route-card-alt2-bg:             var(--route-alt2-color-bg);
+  --route-card-alt2-border:         rgba(139, 92, 246, 0.40);
+  --route-card-alt2-indicator:      var(--route-alt2-color);
+  --route-card-alt2-data-color:     var(--route-alt2-color);
+  --route-card-alt2-shadow:         0 0 0 1px rgba(139, 92, 246, 0.20);
+
+  /* ─── KPIBlock ─── */
+  --kpi-bg:                var(--bg-surface);
+  --kpi-border:            var(--border-default);
+  --kpi-radius:            var(--primitive-radius-xl);
+  --kpi-padding:           16px 18px;
+  --kpi-label-font:        var(--primitive-text-xs);
+  --kpi-label-weight:      700;
+  --kpi-label-tracking:    0.10em;
+  --kpi-label-transform:   uppercase;
+  --kpi-label-color:       var(--text-muted);
+  --kpi-value-font:        var(--font-mono);
+  --kpi-value-size:        22px;
+  --kpi-value-weight:      700;
+  --kpi-value-tracking:    -0.02em;
+  --kpi-value-color:       var(--text-primary);
+  --kpi-value-empty-color: var(--text-muted);
+  --kpi-unit-size:         12px;
+  --kpi-unit-color:        var(--text-muted);
+  --kpi-unit-weight:       400;
+  --kpi-icon-size:         36px;
+  --kpi-icon-radius:       var(--primitive-radius-lg);
+
+  /* ─── Topbar ─── */
+  --topbar-height:     var(--topbar-height, 56px);
+  --topbar-bg:         rgba(10, 12, 16, 0.80);
+  --topbar-backdrop:   blur(12px);
+  --topbar-border:     var(--border-default);
+  --topbar-padding:    0 24px;
+
+  /* ─── Toast / Notificação ─── */
+  --toast-bg:          var(--bg-elevated);
+  --toast-border:      var(--border-emphasis);
+  --toast-radius:      var(--primitive-radius-xl);
+  --toast-shadow:      0 8px 24px rgba(0,0,0,0.40);
+  --toast-z:           var(--z-toast);
+
+  /* ─── Skeleton ─── */
+  --skeleton-from:     var(--bg-muted);
+  --skeleton-to:       var(--bg-elevated);
+  --skeleton-duration: 1.4s;
+
+  /* ─── Scrollbar ─── */
+  --scrollbar-width:   6px;
+  --scrollbar-track:   var(--bg-canvas);
+  --scrollbar-thumb:   var(--primitive-slate-800);
+  --scrollbar-thumb-hover: var(--primitive-slate-700);
+
+  /* ─── Map / Leaflet ─── */
+  --leaflet-bg:                  var(--bg-canvas);
+  --leaflet-popup-bg:            var(--bg-elevated);
+  --leaflet-popup-border:        var(--border-emphasis);
+  --leaflet-popup-text:          var(--text-primary);
+  --leaflet-control-bg:          var(--bg-surface);
+  --leaflet-control-text:        var(--text-secondary);
+  --leaflet-control-border:      var(--border-accent);
+  --leaflet-control-hover-bg:    var(--bg-muted);
+  --leaflet-control-hover-text:  var(--accent);
+  --leaflet-route-primary-color: var(--route-primary-color);
+  --leaflet-route-alt1-color:    var(--route-alt1-color);
+  --leaflet-route-alt2-color:    var(--route-alt2-color);
+  --leaflet-route-primary-weight: 5;
+  --leaflet-route-alt-weight:     4;
+  --leaflet-route-primary-opacity: 0.90;
+  --leaflet-route-alt-opacity:     0.65;
+}
