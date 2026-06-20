@@ -34,6 +34,7 @@ interface State {
   history: HistoryItem[]
   loading: boolean
   error: string | null
+  sharedText: string | null  // endereço recebido via share_target
 }
 
 type Action =
@@ -42,6 +43,7 @@ type Action =
   | { type: 'SET_AXLES'; payload: number }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
+  | { type: 'SET_SHARED_TEXT'; payload: string | null }
   | { type: 'SET_ROUTE_OPTIONS'; routeOptions: RouteResult[]; freights: FreightResult[] }
   | { type: 'SELECT_ROUTE'; idx: number; freights: FreightResult[] }
   | { type: 'ADD_HISTORY'; payload: HistoryItem }
@@ -57,6 +59,7 @@ const initialState: State = {
   history: [],
   loading: false,
   error: null,
+  sharedText: null,
 }
 
 const clearRoute = { routeOptions: [], selectedRouteIdx: 0, route: null, freights: [] }
@@ -73,6 +76,8 @@ function reducer(state: State, action: Action): State {
       return { ...state, loading: action.payload }
     case 'SET_ERROR':
       return { ...state, error: action.payload }
+    case 'SET_SHARED_TEXT':
+      return { ...state, sharedText: action.payload }
     case 'SET_ROUTE_OPTIONS':
       return {
         ...state,

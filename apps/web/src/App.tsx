@@ -26,6 +26,17 @@ function App() {
     })
   }, [])
 
+  // share_target: recebe endereço compartilhado de outro app (Google Maps, WhatsApp etc.)
+  // O manifest envia ?text=<endereço> via GET quando o usuário compartilha com o ViaXen
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const shared = params.get('text') || params.get('title') || params.get('url')
+    if (!shared) return
+    dispatch({ type: 'SET_SHARED_TEXT', payload: shared.trim() })
+    // Limpa a query string sem recarregar a página
+    window.history.replaceState({}, '', '/')
+  }, [])
+
   const routeOptionsGeom = routeOptions.map(r =>
     r.geometry.coordinates.map((c: number[]) => [c[1], c[0]] as [number, number])
   )

@@ -9,6 +9,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: 'auto',
       devOptions: {
         enabled: true
       },
@@ -17,7 +18,7 @@ export default defineConfig({
         globIgnores: ['**/*.wasm'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
 
-        // Offline: serve index.html para qualquer rota não encontrada no cache
+        // Offline: serve index.html para qualquer rota SPA não encontrada no cache
         navigateFallback: 'index.html',
         navigateFallbackDenylist: [/^\/_/, /\/[^/?]+\.[^/]+$/],
 
@@ -65,10 +66,27 @@ export default defineConfig({
         theme_color: '#FF7A00',
         background_color: '#EDE0C4',
         display: 'standalone',
+        // Fallback chain: WCO (título nativo no desktop) → standalone → minimal-ui
+        display_override: ['window-controls-overlay', 'standalone', 'minimal-ui'],
         orientation: 'portrait',
         lang: 'pt-BR',
+        dir: 'ltr',
         categories: ['business', 'productivity', 'utilities'],
         prefer_related_applications: false,
+        // Foca janela existente ao reabrir o app (evita múltiplas instâncias)
+        launch_handler: {
+          client_mode: 'focus-existing',
+        },
+        // Receber endereços compartilhados de outros apps (Google Maps, WhatsApp etc.)
+        share_target: {
+          action: '/',
+          method: 'GET',
+          params: {
+            title: 'title',
+            text: 'text',
+            url: 'url',
+          },
+        },
         icons: [
           { src: 'icon-192.png',          sizes: '192x192', type: 'image/png', purpose: 'any' },
           { src: 'icon-512.png',          sizes: '512x512', type: 'image/png', purpose: 'any' },

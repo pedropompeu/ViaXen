@@ -1,4 +1,4 @@
-import { Route, X, Plus, Navigation2, Loader2 } from 'lucide-react'
+import { Route, X, Plus, Navigation2, Loader2, Share2 } from 'lucide-react'
 import { useRoute } from '../context/RouteContext'
 import { AddressInput, type AddressResult } from './AddressInput'
 import { type StopSlot } from '../hooks/useStops'
@@ -22,7 +22,7 @@ function Dot({ color }: { color: string }) {
 
 export function RouteForm({ stopSlots, onAddStop, onRemoveStop, onSetStop, onCalculate }: RouteFormProps) {
   const { state, dispatch } = useRoute()
-  const { origin, destination, axles, loading } = state
+  const { origin, destination, axles, loading, sharedText } = state
   const isReady = !loading && !!origin && !!destination
 
   return (
@@ -33,6 +33,36 @@ export function RouteForm({ stopSlots, onAddStop, onRemoveStop, onSetStop, onCal
       padding: 20,
       boxShadow: '0 1px 3px rgba(120,85,35,0.06)',
     }}>
+      {/* Banner: endereço recebido via share_target */}
+      {sharedText && (
+        <div style={{
+          display: 'flex', alignItems: 'flex-start', gap: 8,
+          background: 'var(--vx-cyan-dim)',
+          border: '1px solid var(--vx-cyan-border)',
+          borderRadius: 8, padding: '10px 12px', marginBottom: 16,
+          animation: 'fadeSlideIn 240ms var(--ease-out) both',
+        }}>
+          <Share2 size={14} strokeWidth={1.5} color="var(--vx-cyan-dark)" style={{ flexShrink: 0, marginTop: 1 }} />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ margin: '0 0 2px', fontFamily: 'var(--font-display)', fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--vx-cyan-dark)' }}>
+              Endereço compartilhado
+            </p>
+            <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 12, color: 'var(--vx-text-secondary)', wordBreak: 'break-word' }}>
+              {sharedText}
+            </p>
+            <p style={{ margin: '4px 0 0', fontFamily: 'var(--font-display)', fontSize: 10, color: 'var(--vx-text-muted)' }}>
+              Use como origem ou destino no campo abaixo
+            </p>
+          </div>
+          <button
+            onClick={() => dispatch({ type: 'SET_SHARED_TEXT', payload: null })}
+            aria-label="Dispensar endereço compartilhado"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--vx-text-muted)', padding: 0, display: 'flex' }}
+          >
+            <X size={13} strokeWidth={2} />
+          </button>
+        </div>
+      )}
       <div style={{
         fontFamily: 'var(--font-display)', fontSize: 10, fontWeight: 700,
         letterSpacing: '0.15em', textTransform: 'uppercase',
