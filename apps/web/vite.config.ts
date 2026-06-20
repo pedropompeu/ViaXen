@@ -18,12 +18,17 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB para os demais assets
       },
       manifest: {
+        id: '/',
+        start_url: '/',
+        scope: '/',
         name: 'VIAXEN',
         short_name: 'VIAXEN',
-        description: 'Route Intelligence Platform — Cálculo de Rota e Frete',
+        description: 'Calcule rotas rodoviárias e fretes ANTT em segundos.',
         theme_color: '#0D1117',
         background_color: '#080C10',
         display: 'standalone',
+        orientation: 'portrait',
+        lang: 'pt-BR',
         icons: [
           { src: 'icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
           { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
