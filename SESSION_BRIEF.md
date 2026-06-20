@@ -12,13 +12,14 @@
 | Backend | **Nenhum** — 100% client-side, CSV ANTT local |
 | Auth | **Nenhuma** — histórico só em sessão local |
 | BRAND.md | ✅ Aprovado — conceito XENITH, light theme areia quente, accent amber #FF7A00 |
+| PWA | ✅ Pronto para empacotamento — score 36/45, SW ativo, manifest completo |
 | Monorepo | pnpm workspaces → `apps/web/` |
 
 ## Plano Aprovado (C-Level 2026-06-20)
 
 ```
 Sprint 0  ✅ Analytics (Plausible) + Política de privacidade
-Sprint 1  ⏳ Play Store via TWA — desbloqueado, aguardando APK do pwabuilder.com
+Sprint 1  ✅ PWA pronto — aguardando ação manual: Package For Stores no pwabuilder.com
 Sprint 2  → Supabase: auth opcional + histórico persistido
 Sprint 3  → Freemium + migrar OSRM/Nominatim (APIs públicas têm restrição comercial)
 Sprint 4  ✅ Componentizar App.tsx (560 → 82 linhas) — antecipado em 2026-06-20
@@ -28,49 +29,53 @@ Sprint 4  ✅ Componentizar App.tsx (560 → 82 linhas) — antecipado em 2026-0
 
 ## Sprint 0 — CONCLUÍDO
 
-- **Plausible Analytics**: script em `index.html` + `src/services/analytics.ts` com 4 eventos customizados (`calcular-rota`, `exportar-csv`, `selecionar-alternativa`, `adicionar-parada`). Conta ativada em 2026-06-20 — dashboard em plausible.io.
-- **Política de Privacidade**: `/privacidade.html` (estática, tema ViaXen) + link no footer. Cobre Plausible sem cookies, dados de sessão, OSRM/Nominatim, direitos LGPD.
+- **Plausible Analytics**: script em `index.html` + `src/services/analytics.ts` com 4 eventos customizados.
+- **Política de Privacidade**: `/privacidade.html` + link no footer. Cobre LGPD.
 
-## Sprint 1 — EM ANDAMENTO (desbloqueado em 2026-06-20)
+## Sprint 1 — CÓDIGO CONCLUÍDO (2026-06-20) — aguardando ação manual
 
-### O que foi feito (2026-06-20)
+### O que foi entregue
 
-**Redesign XENITH completo — 5 fases:**
-- **Fase 1 — Tokens:** paleta areia quente (`#EDE0C4` canvas), accent amber `#FF7A00`, Geist + Geist Mono via fontsource, textura de trama no body
-- **Fase 2 — Ícones Lucide:** substituídos todos os SVGs inline; indicador lateral 4px por cor de rota em RouteAlternatives; font-mono nos valores KPI
-- **Fase 3 — Mapa:** marcadores `L.divIcon` SVG por tipo (origem/parada/destino); polilínias indexadas por rota; Topbar sticky
-- **Fase 4 — PWA:** favicon amber, `theme_color: #FF7A00`, `background_color: #EDE0C4`, ícones 192/512/maskable regenerados com símbolo XENITH
-- **Fase 5 — WCAG AA:** `--vx-text-muted` escurecido (3.17:1 → 6.45:1); `--vx-route-primary-text: #7A3800` para texto de rota amber (6.16:1); `:focus-visible` global; ARIA em RouteAlternatives, AddressInput, Map, RouteForm
+**Redesign XENITH completo (5 fases):**
+- Paleta areia quente, accent amber #FF7A00, Geist + Geist Mono
+- Lucide Icons em todos os componentes
+- Marcadores Leaflet customizados (origem/parada/destino) em SVG
+- WCAG AA: `--vx-text-muted` 6.45:1, `:focus-visible`, ARIA completo
+- favicon.svg + ícones PWA 192/512/maskable regenerados com símbolo XENITH
 
-**PWA score (pwabuilder.com):**
-- Service Worker melhorado: `navigateFallback: index.html` + runtimeCaching (OSM tiles CacheFirst/30d, Nominatim NetworkFirst/1d, OSRM NetworkFirst/6h)
-- Screenshots adicionadas ao manifest: `desktop.png` 1280×720 (wide) + `mobile.png` 390×844 (narrow)
-- Manifest: `categories`, `prefer_related_applications: false`
-- 2 warnings que travavam empacotamento resolvidos
+**PWA — score 36/45, pronto para empacotamento:**
+- Service Worker: Has Service Worker ✓ · Has Logic ✓ · Periodic Sync · Background Sync
+- App Capabilities: Shortcuts ✓ · Launch Handler ✓ · File Handlers · Protocol Handlers
+- Manifest: 0 erros, 0 warnings — todos campos required + recommended preenchidos
+- `dir`, `display_override`, `launch_handler`, `share_target`, `shortcuts`, `categories`
+- Screenshots: desktop 1280×720 + mobile 390×844
+- `vercel.json`: headers corretos para `sw.js` (`no-cache`) e `workbox-*.js` (`immutable`)
+- Ícones de shortcuts 96×96: seta amber (Nova Rota) + caminhão amber (Frete ANTT)
+- `share_target`: endereço compartilhado de outros apps aparece como banner no RouteForm
 
-### Próximo passo (manual — pendente)
+### Próximos passos manuais (Play Store)
 
-1. **Gerar APK no pwabuilder.com** → informar `https://viaxen.vercel.app` → package `com.viaxen.app`
-2. **Copiar SHA-256** do certificado gerado → substituir `"PLACEHOLDER"` em `public/.well-known/assetlinks.json`
-3. Commit + push do assetlinks atualizado → deploy Vercel
-4. **Conta Google Play** ($25 taxa única) → submeter `.aab`
+1. **pwabuilder.com** → `https://viaxen.vercel.app` → "Package For Stores" → Android
+2. Anotar o **SHA-256 do certificado** gerado → substituir `"PLACEHOLDER"` em `public/.well-known/assetlinks.json` → commit + push
+3. **Conta Google Play** ($25 taxa única) → submeter `.aab`
+4. **IARC rating** — gerado dentro do próprio fluxo de submissão no Play Console (não editar o manifest manualmente)
 
-### O que fica para a próxima sessão
-- Preencher `assetlinks.json` com SHA-256 real (depende do APK gerado no passo acima)
-- Verificar TWA funcionando sem barra de URL no Android
+### Campos opcionais restantes (não implementar)
+- `related_applications` — adicionar após publicação na Play Store
+- `iarc_rating_id` — gerado pelo Play Console durante submissão
+- `scope_extensions`, `file_handlers`, `protocol_handlers` — não aplicáveis ao produto atual
 
 ## Sprint 4 — CONCLUÍDO ANTECIPADO (2026-06-20)
 
 - **Componentização do App.tsx**: 560 → 82 linhas
 - Extraídos: `hooks/useStops`, `hooks/useRouteCalculator`, `utils/format`
 - Novos componentes: `Topbar`, `ErrorToast`, `RouteForm`, `RouteAlternatives`, `FreightTable`, `KpiCards`, `AppFooter`
-- Deploy em produção: `via-xen.vercel.app` (commit `40268de`)
 
 ## Riscos Ativos
 
 - OSRM e Nominatim proíbem uso comercial em escala → resolver no Sprint 3
 - LGPD: persistência de histórico exige consentimento explícito → Sprint 2
-- `assetlinks.json` ainda com SHA-256 placeholder → TWA não verifica até ser preenchido
+- `assetlinks.json` com SHA-256 placeholder → TWA não verifica até ser preenchido após APK
 
 ## Métricas de Sucesso (revisão: 2026-08-20)
 
@@ -82,18 +87,19 @@ Sprint 4  ✅ Componentizar App.tsx (560 → 82 linhas) — antecipado em 2026-0
 
 | Arquivo | O que tem |
 |---------|-----------|
-| `apps/web/src/App.tsx` | Orquestrador principal (82 linhas) |
-| `apps/web/src/components/` | 8 componentes: Topbar, RouteForm, RouteAlternatives, FreightTable, KpiCards, Map, ErrorToast, AppFooter |
+| `apps/web/src/App.tsx` | Orquestrador (82 linhas) + handlers share_target e shortcuts |
+| `apps/web/src/components/` | 8 componentes com Lucide Icons e tokens XENITH |
+| `apps/web/src/index.css` | Tokens CSS XENITH + WCAG AA + focus-visible |
+| `apps/web/src/context/RouteContext.tsx` | Estado global + sharedText para share_target |
 | `apps/web/src/services/routing.ts` | Integração OSRM |
 | `apps/web/src/services/duckdb.ts` | Cálculo de frete (CSV ANTT) |
 | `apps/web/src/services/analytics.ts` | Wrapper Plausible (4 eventos) |
-| `apps/web/src/context/RouteContext.tsx` | Estado global |
-| `apps/web/src/index.css` | Tokens CSS + grid + animações + WCAG |
 | `apps/web/public/data/antt_frete.csv` | Tabela ANTT 5820/2019 |
-| `apps/web/public/.well-known/assetlinks.json` | TWA — **SHA-256 PLACEHOLDER** (preencher após APK) |
+| `apps/web/public/.well-known/assetlinks.json` | TWA — **SHA-256 PLACEHOLDER** |
 | `apps/web/public/screenshots/` | desktop.png 1280×720 + mobile.png 390×844 |
-| `apps/web/public/privacidade.html` | Política de privacidade LGPD |
-| `apps/web/vite.config.ts` | Config PWA completa (manifest + Workbox runtime caching) |
+| `apps/web/public/shortcuts/` | icon-nova-rota.png + icon-frete.png (96×96) |
+| `apps/web/vite.config.ts` | Config PWA completa (manifest + Workbox + shortcuts) |
+| `vercel.json` | Build config + headers corretos para sw.js e workbox |
 | `BRAND.md` | Sistema de design XENITH aprovado — v1.0 |
 | `manifesto.yaml` | Metadados do projeto |
 
