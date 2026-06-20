@@ -13,9 +13,47 @@ export default defineConfig({
         enabled: true
       },
       workbox: {
-        // Arquivos .wasm do DuckDB chegam a 41MB — excluir do precache do SW
+        // DuckDB .wasm chega a 41MB — excluir do precache
         globIgnores: ['**/*.wasm'],
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB para os demais assets
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+
+        // Offline: serve index.html para qualquer rota não encontrada no cache
+        navigateFallback: 'index.html',
+        navigateFallbackDenylist: [/^\/_/, /\/[^/?]+\.[^/]+$/],
+
+        // Cache de runtime para APIs externas
+        runtimeCaching: [
+          {
+            // Tiles do OpenStreetMap — cache de longa duração
+            urlPattern: /^https:\/\/[abc]\.tile\.openstreetmap\.org\//,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'osm-tiles',
+              expiration: { maxEntries: 500, maxAgeSeconds: 60 * 60 * 24 * 30 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // Geocodificação Nominatim — cache curto (dados mudam)
+            urlPattern: /^https:\/\/nominatim\.openstreetmap\.org\//,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'nominatim-cache',
+              expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+          {
+            // OSRM routing — NetworkFirst com fallback
+            urlPattern: /^https:\/\/router\.project-osrm\.org\//,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'osrm-cache',
+              expiration: { maxEntries: 50, maxAgeSeconds: 60 * 60 * 6 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
       },
       manifest: {
         id: '/',
@@ -29,13 +67,31 @@ export default defineConfig({
         display: 'standalone',
         orientation: 'portrait',
         lang: 'pt-BR',
+        categories: ['business', 'productivity', 'utilities'],
+        prefer_related_applications: false,
         icons: [
-          { src: 'icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-          { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: 'icon-192.png',          sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: 'icon-512.png',          sizes: '512x512', type: 'image/png', purpose: 'any' },
           { src: 'icon-maskable-192.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
           { src: 'icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
-        ]
-      }
-    })
+        ],
+        screenshots: [
+          {
+            src: 'screenshots/desktop.png',
+            sizes: '1280x720',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: 'Cálculo de rotas e fretes ANTT',
+          },
+          {
+            src: 'screenshots/mobile.png',
+            sizes: '390x844',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: 'VIAXEN no celular',
+          },
+        ],
+      },
+    }),
   ],
 })
