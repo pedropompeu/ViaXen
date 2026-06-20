@@ -5,6 +5,7 @@ import { getRoute } from './services/routing'
 import { initDuckDB, calculateFreight } from './services/duckdb'
 import { exportToCSV } from './services/export'
 import { useRoute, type RoutePoint } from './context/RouteContext'
+import { analytics } from './services/analytics'
 import './App.css'
 
 const VNodeIcon = () => (
@@ -67,6 +68,7 @@ function App() {
       const distKm = results[0].distance / 1000
       const freightList = await calculateFreight(distKm, axles)
 
+      analytics.calcularRota({ eixos: axles, paradas: filledStops.length, sucesso: true })
       dispatch({ type: 'SET_ROUTE_OPTIONS', routeOptions: results, freights: freightList })
       dispatch({
         type: 'ADD_HISTORY',
@@ -82,6 +84,7 @@ function App() {
         },
       })
     } catch (err: any) {
+      analytics.calcularRota({ eixos: axles, paradas: filledStops.length, sucesso: false })
       console.error('[VIAXEN] erro no cálculo:', err)
       const msg = err?.message ?? ''
       if (msg.includes('OSRM') || msg.includes('fetch')) {
@@ -99,6 +102,7 @@ function App() {
   const handleSelectRoute = async (idx: number) => {
     const selected = routeOptions[idx]
     if (!selected) return
+    if (idx > 0) analytics.selecionarAlternativa(idx)
     const distKm = selected.distance / 1000
     const freightList = await calculateFreight(distKm, axles)
     dispatch({ type: 'SELECT_ROUTE', idx, freights: freightList })
@@ -109,10 +113,12 @@ function App() {
       dispatch({ type: 'SET_ERROR', payload: 'Nenhum dado para exportar. Calcule ao menos uma rota primeiro.' })
       return
     }
+    analytics.exportarCSV(history.length)
     exportToCSV(history, `viaxen-export-${new Date().toISOString().split('T')[0]}`)
   }
 
   const addStop = () => {
+    analytics.adicionarParada()
     setStopSlots(prev => [...prev, { id: nextIdRef.current++, point: null }])
   }
 
