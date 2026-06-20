@@ -55,7 +55,7 @@ export function AddressInput({ placeholder, onSelect }: Props) {
 
       setLoading(true)
       try {
-        const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lang=pt&limit=6&bbox=${BRAZIL_BBOX}`
+        const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=6&bbox=${BRAZIL_BBOX}`
         const res = await fetch(url, { signal: abortRef.current.signal })
         const data = await res.json()
 
