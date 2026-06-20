@@ -11,14 +11,14 @@
 | Stack | React 19 + TypeScript + Vite 5 + Tailwind v4 + Leaflet + OSRM + PWA |
 | Backend | **Nenhum** — 100% client-side, CSV ANTT local |
 | Auth | **Nenhuma** — histórico só em sessão local |
-| BRAND.md | ✅ Criado — aguardando time de design entregar assets |
+| BRAND.md | ✅ Aprovado — conceito XENITH, light theme areia quente, accent amber #FF7A00 |
 | Monorepo | pnpm workspaces → `apps/web/` |
 
 ## Plano Aprovado (C-Level 2026-06-20)
 
 ```
 Sprint 0  ✅ Analytics (Plausible) + Política de privacidade
-Sprint 1  ⏳ Play Store via TWA — BLOQUEADO aguardando rebrand
+Sprint 1  ⏳ Play Store via TWA — desbloqueado, aguardando APK do pwabuilder.com
 Sprint 2  → Supabase: auth opcional + histórico persistido
 Sprint 3  → Freemium + migrar OSRM/Nominatim (APIs públicas têm restrição comercial)
 Sprint 4  ✅ Componentizar App.tsx (560 → 82 linhas) — antecipado em 2026-06-20
@@ -31,22 +31,33 @@ Sprint 4  ✅ Componentizar App.tsx (560 → 82 linhas) — antecipado em 2026-0
 - **Plausible Analytics**: script em `index.html` + `src/services/analytics.ts` com 4 eventos customizados (`calcular-rota`, `exportar-csv`, `selecionar-alternativa`, `adicionar-parada`). Conta ativada em 2026-06-20 — dashboard em plausible.io.
 - **Política de Privacidade**: `/privacidade.html` (estática, tema ViaXen) + link no footer. Cobre Plausible sem cookies, dados de sessão, OSRM/Nominatim, direitos LGPD.
 
-## Sprint 1 — EM ANDAMENTO (bloqueado)
+## Sprint 1 — EM ANDAMENTO (desbloqueado em 2026-06-20)
 
-### O que foi feito
-- Manifest PWA atualizado: `id`, `start_url`, `scope`, `orientation`, `lang: pt-BR`
-- `public/.well-known/assetlinks.json` criado com placeholder SHA-256
-- `vercel.json` com header `Content-Type: application/json` para assetlinks
+### O que foi feito (2026-06-20)
 
-### Bloqueio: Rebrand visual
-Decisão: **light theme** (fundo branco/off-white) + sistema de texturas táteis, público primário é motorista/caminhoneiro independente. BRAND.md entregue ao time de design com todos os entregáveis esperados.
+**Redesign XENITH completo — 5 fases:**
+- **Fase 1 — Tokens:** paleta areia quente (`#EDE0C4` canvas), accent amber `#FF7A00`, Geist + Geist Mono via fontsource, textura de trama no body
+- **Fase 2 — Ícones Lucide:** substituídos todos os SVGs inline; indicador lateral 4px por cor de rota em RouteAlternatives; font-mono nos valores KPI
+- **Fase 3 — Mapa:** marcadores `L.divIcon` SVG por tipo (origem/parada/destino); polilínias indexadas por rota; Topbar sticky
+- **Fase 4 — PWA:** favicon amber, `theme_color: #FF7A00`, `background_color: #EDE0C4`, ícones 192/512/maskable regenerados com símbolo XENITH
+- **Fase 5 — WCAG AA:** `--vx-text-muted` escurecido (3.17:1 → 6.45:1); `--vx-route-primary-text: #7A3800` para texto de rota amber (6.16:1); `:focus-visible` global; ARIA em RouteAlternatives, AddressInput, Map, RouteForm
 
-### Próximos passos quando o rebrand chegar
-1. Aplicar paleta + tipografia no CSS/Tailwind
-2. Substituir ícones do app (PNG 192, 512, maskable)
-3. Gerar APK no **pwabuilder.com** → package `com.viaxen.app`
-4. Preencher SHA-256 real no `assetlinks.json` e fazer deploy
-5. Conta Google Play ($25 taxa única) → submeter `.aab`
+**PWA score (pwabuilder.com):**
+- Service Worker melhorado: `navigateFallback: index.html` + runtimeCaching (OSM tiles CacheFirst/30d, Nominatim NetworkFirst/1d, OSRM NetworkFirst/6h)
+- Screenshots adicionadas ao manifest: `desktop.png` 1280×720 (wide) + `mobile.png` 390×844 (narrow)
+- Manifest: `categories`, `prefer_related_applications: false`
+- 2 warnings que travavam empacotamento resolvidos
+
+### Próximo passo (manual — pendente)
+
+1. **Gerar APK no pwabuilder.com** → informar `https://viaxen.vercel.app` → package `com.viaxen.app`
+2. **Copiar SHA-256** do certificado gerado → substituir `"PLACEHOLDER"` em `public/.well-known/assetlinks.json`
+3. Commit + push do assetlinks atualizado → deploy Vercel
+4. **Conta Google Play** ($25 taxa única) → submeter `.aab`
+
+### O que fica para a próxima sessão
+- Preencher `assetlinks.json` com SHA-256 real (depende do APK gerado no passo acima)
+- Verificar TWA funcionando sem barra de URL no Android
 
 ## Sprint 4 — CONCLUÍDO ANTECIPADO (2026-06-20)
 
@@ -58,9 +69,8 @@ Decisão: **light theme** (fundo branco/off-white) + sistema de texturas táteis
 ## Riscos Ativos
 
 - OSRM e Nominatim proíbem uso comercial em escala → resolver no Sprint 3
-- Sem dados de uso real → Sprint 0 resolveu com Plausible (aguarda ativação da conta)
 - LGPD: persistência de histórico exige consentimento explícito → Sprint 2
-- Rebrand bloqueia lançamento na Play Store → aguardando time de design
+- `assetlinks.json` ainda com SHA-256 placeholder → TWA não verifica até ser preenchido
 
 ## Métricas de Sucesso (revisão: 2026-08-20)
 
@@ -72,16 +82,19 @@ Decisão: **light theme** (fundo branco/off-white) + sistema de texturas táteis
 
 | Arquivo | O que tem |
 |---------|-----------|
-| `apps/web/src/App.tsx` | Frontend principal (monolítico, 544 linhas) |
+| `apps/web/src/App.tsx` | Orquestrador principal (82 linhas) |
+| `apps/web/src/components/` | 8 componentes: Topbar, RouteForm, RouteAlternatives, FreightTable, KpiCards, Map, ErrorToast, AppFooter |
 | `apps/web/src/services/routing.ts` | Integração OSRM |
 | `apps/web/src/services/duckdb.ts` | Cálculo de frete (CSV ANTT) |
 | `apps/web/src/services/analytics.ts` | Wrapper Plausible (4 eventos) |
 | `apps/web/src/context/RouteContext.tsx` | Estado global |
+| `apps/web/src/index.css` | Tokens CSS + grid + animações + WCAG |
 | `apps/web/public/data/antt_frete.csv` | Tabela ANTT 5820/2019 |
-| `apps/web/public/.well-known/assetlinks.json` | TWA — SHA-256 placeholder |
+| `apps/web/public/.well-known/assetlinks.json` | TWA — **SHA-256 PLACEHOLDER** (preencher após APK) |
+| `apps/web/public/screenshots/` | desktop.png 1280×720 + mobile.png 390×844 |
 | `apps/web/public/privacidade.html` | Política de privacidade LGPD |
-| `apps/web/vite.config.ts` | Config PWA (manifest, Workbox) |
-| `BRAND.md` | Brief de direção criativa para o time de design |
+| `apps/web/vite.config.ts` | Config PWA completa (manifest + Workbox runtime caching) |
+| `BRAND.md` | Sistema de design XENITH aprovado — v1.0 |
 | `manifesto.yaml` | Metadados do projeto |
 
 ## Decisão formal
