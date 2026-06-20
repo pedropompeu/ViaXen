@@ -7,9 +7,11 @@ import { RouteAlternatives } from './components/RouteAlternatives'
 import { FreightTable } from './components/FreightTable'
 import { KpiCards } from './components/KpiCards'
 import { AppFooter } from './components/AppFooter'
+import { InstallBanner } from './components/InstallBanner'
 import { useRoute } from './context/RouteContext'
 import { useStops } from './hooks/useStops'
 import { useRouteCalculator } from './hooks/useRouteCalculator'
+import { useInstallPrompt } from './hooks/useInstallPrompt'
 import { initDuckDB } from './services/duckdb'
 import './App.css'
 
@@ -19,6 +21,7 @@ function App() {
 
   const { stopSlots, addStop, removeStop, setStop } = useStops()
   const { handleCalculateRoute, handleSelectRoute, handleExport } = useRouteCalculator(stopSlots)
+  const { installState, install, dismiss } = useInstallPrompt()
 
   useEffect(() => {
     initDuckDB().catch(() => {
@@ -100,6 +103,12 @@ function App() {
       </main>
 
       <AppFooter />
+
+      <InstallBanner
+        installState={installState}
+        onInstall={install}
+        onDismiss={dismiss}
+      />
     </div>
   )
 }
