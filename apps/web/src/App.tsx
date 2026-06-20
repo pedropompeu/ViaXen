@@ -26,15 +26,29 @@ function App() {
     })
   }, [])
 
-  // share_target: recebe endereço compartilhado de outro app (Google Maps, WhatsApp etc.)
-  // O manifest envia ?text=<endereço> via GET quando o usuário compartilha com o ViaXen
+  // Lê query params na inicialização — share_target e shortcuts
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
+
+    // share_target: endereço compartilhado de outro app (Google Maps, WhatsApp etc.)
     const shared = params.get('text') || params.get('title') || params.get('url')
-    if (!shared) return
-    dispatch({ type: 'SET_SHARED_TEXT', payload: shared.trim() })
-    // Limpa a query string sem recarregar a página
-    window.history.replaceState({}, '', '/')
+    if (shared) {
+      dispatch({ type: 'SET_SHARED_TEXT', payload: shared.trim() })
+    }
+
+    // shortcuts: ações rápidas do menu de contexto do app instalado
+    const acao = params.get('acao')
+    if (acao === 'nova-rota') {
+      dispatch({ type: 'SET_ORIGIN', payload: null })
+      dispatch({ type: 'SET_DESTINATION', payload: null })
+    } else if (acao === 'frete') {
+      // Rola até a seção de frete após o app montar
+      setTimeout(() => {
+        document.getElementById('freight-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 300)
+    }
+
+    if (shared || acao) window.history.replaceState({}, '', '/')
   }, [])
 
   const routeOptionsGeom = routeOptions.map(r =>
@@ -69,7 +83,7 @@ function App() {
             onCalculate={handleCalculateRoute}
           />
           <RouteAlternatives onSelect={handleSelectRoute} />
-          <FreightTable freights={freights} />
+          <div id="freight-section"><FreightTable freights={freights} /></div>
         </aside>
 
         <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 16, minWidth: 0 }}>

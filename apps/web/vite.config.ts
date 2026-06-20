@@ -93,6 +93,22 @@ export default defineConfig({
           { src: 'icon-maskable-192.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
           { src: 'icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
+        shortcuts: [
+          {
+            name: 'Nova Rota',
+            short_name: 'Nova Rota',
+            description: 'Calcule uma nova rota rodoviária com fretes ANTT',
+            url: '/?acao=nova-rota',
+            icons: [{ src: 'shortcuts/icon-nova-rota.png', sizes: '96x96', type: 'image/png' }],
+          },
+          {
+            name: 'Consultar Frete ANTT',
+            short_name: 'Frete ANTT',
+            description: 'Consulte os fretes mínimos da tabela ANTT 5820/2019',
+            url: '/?acao=frete',
+            icons: [{ src: 'shortcuts/icon-frete.png', sizes: '96x96', type: 'image/png' }],
+          },
+        ],
         screenshots: [
           {
             src: 'screenshots/desktop.png',
