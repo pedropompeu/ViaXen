@@ -12,6 +12,24 @@ interface Props {
   onSelect: (result: AddressResult) => void
 }
 
+// Bbox do Brasil para priorizar resultados nacionais
+const BRAZIL_BBOX = '-73.98283,-33.75117,-28.84731,5.24448'
+
+// Converte feature do Photon em AddressResult legível
+function photonToResult(feature: any): AddressResult {
+  const p = feature.properties ?? {}
+  const [lng, lat] = feature.geometry?.coordinates ?? [0, 0]
+
+  const parts: string[] = []
+  if (p.name && p.name !== p.city) parts.push(p.name)
+  if (p.city)     parts.push(p.city)
+  else if (p.town || p.village) parts.push(p.town ?? p.village)
+  if (p.state)    parts.push(p.state)
+
+  const label = parts.length > 0 ? parts.join(', ') : p.display_name ?? 'Local desconhecido'
+  return { label, lat, lng }
+}
+
 export function AddressInput({ placeholder, onSelect }: Props) {
   const [query, setQuery] = useState('')
   const [suggestions, setSuggestions] = useState<AddressResult[]>([])
@@ -19,41 +37,51 @@ export function AddressInput({ placeholder, onSelect }: Props) {
   const [loading, setLoading] = useState(false)
   const [selected, setSelected] = useState('')
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const lastRequestRef = useRef<number>(0)
+  const abortRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
-    if (query.length < 3 || query === selected) {
+    if (query.length < 2 || query === selected) {
       setSuggestions([])
       setOpen(false)
       return
     }
+
     if (debounceRef.current) clearTimeout(debounceRef.current)
+
     debounceRef.current = setTimeout(async () => {
-      const now = Date.now()
-      const elapsed = now - lastRequestRef.current
-      if (elapsed < 1000) await new Promise(r => setTimeout(r, 1000 - elapsed))
-      lastRequestRef.current = Date.now()
+      // Cancela requisição anterior se ainda estiver em andamento
+      abortRef.current?.abort()
+      abortRef.current = new AbortController()
+
       setLoading(true)
       try {
-        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&addressdetails=1&limit=5&countrycodes=br`
-        const res = await fetch(url, { headers: { 'Accept-Language': 'pt-BR' } })
+        const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&lang=pt&limit=6&bbox=${BRAZIL_BBOX}`
+        const res = await fetch(url, { signal: abortRef.current.signal })
         const data = await res.json()
-        const results: AddressResult[] = data.map((item: any) => {
-          const addr = item.address ?? {}
-          const city = addr.city ?? addr.town ?? addr.municipality ?? addr.village ?? addr.county ?? item.display_name
-          const state = addr.state ?? ''
-          return { label: state ? `${city}, ${state}` : city, lat: parseFloat(item.lat), lng: parseFloat(item.lon) }
-        })
+
+        const results: AddressResult[] = (data.features ?? [])
+          .map(photonToResult)
+          // Remove duplicatas por label
+          .filter((r: AddressResult, i: number, arr: AddressResult[]) =>
+            arr.findIndex(x => x.label === r.label) === i
+          )
+          .slice(0, 5)
+
         setSuggestions(results)
         setOpen(results.length > 0)
-      } catch {
-        setSuggestions([])
-        setOpen(false)
+      } catch (err: any) {
+        if (err.name !== 'AbortError') {
+          setSuggestions([])
+          setOpen(false)
+        }
       } finally {
         setLoading(false)
       }
-    }, 500)
-    return () => { if (debounceRef.current) clearTimeout(debounceRef.current) }
+    }, 300)
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current)
+    }
   }, [query, selected])
 
   function handleSelect(result: AddressResult) {
@@ -67,7 +95,6 @@ export function AddressInput({ placeholder, onSelect }: Props) {
   return (
     <div style={{ position: 'relative' }}>
       <div style={{ position: 'relative' }}>
-        {/* Ícone de busca à esquerda */}
         <div style={{
           position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)',
           color: 'var(--vx-muted)', pointerEvents: 'none',
@@ -98,10 +125,13 @@ export function AddressInput({ placeholder, onSelect }: Props) {
             boxSizing: 'border-box',
           }}
           onFocus={e => (e.target.style.borderColor = 'var(--vx-cyan)')}
-          onBlur={e => (e.target.style.borderColor = 'var(--vx-cyan-border)')}
+          onBlur={e => {
+            e.target.style.borderColor = 'var(--vx-cyan-border)'
+            // Fecha dropdown ao perder foco com delay para permitir clique nas sugestões
+            setTimeout(() => { setSuggestions([]); setOpen(false) }, 150)
+          }}
         />
 
-        {/* Spinner de loading à direita */}
         {loading && (
           <div style={{
             position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)',
@@ -126,7 +156,7 @@ export function AddressInput({ placeholder, onSelect }: Props) {
           {suggestions.map((s, i) => (
             <li
               key={i}
-              onClick={() => handleSelect(s)}
+              onMouseDown={() => handleSelect(s)}
               style={{
                 padding: '9px 14px', fontSize: 12, cursor: 'pointer',
                 color: 'var(--vx-text-secondary)',

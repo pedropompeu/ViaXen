@@ -35,12 +35,12 @@ export default defineConfig({
             },
           },
           {
-            // Geocodificação Nominatim — cache curto (dados mudam)
-            urlPattern: /^https:\/\/nominatim\.openstreetmap\.org\//,
+            // Autocomplete Photon (Komoot) — cache curto
+            urlPattern: /^https:\/\/photon\.komoot\.io\//,
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'nominatim-cache',
-              expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 },
+              cacheName: 'photon-cache',
+              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 },
               cacheableResponse: { statuses: [0, 200] },
             },
           },
