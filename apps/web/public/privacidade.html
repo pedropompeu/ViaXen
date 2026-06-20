@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Política de Privacidade — VIAXEN</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #080C10;
+      --surface: #0D1117;
+      --card: #111820;
+      --cyan: #00E5FF;
+      --cyan-border: rgba(0,229,255,0.12);
+      --text-primary: #E8EDF2;
+      --text-secondary: #8B99A6;
+      --text-muted: #4A5568;
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 15px;
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+
+    header {
+      height: 52px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--cyan-border);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 10px;
+    }
+
+    header a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-text {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .logo-v { color: var(--cyan); }
+    .logo-rest { color: var(--text-primary); }
+
+    .badge {
+      font-family: var(--font-display);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      background: rgba(0,229,255,0.1);
+      border: 1px solid rgba(0,229,255,0.2);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    main {
+      max-width: 680px;
+      margin: 56px auto 80px;
+      padding: 0 24px;
+    }
+
+    .page-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .page-meta {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+    }
+
+    section {
+      margin-bottom: 36px;
+      padding: 24px;
+      background: var(--card);
+      border: 1px solid var(--cyan-border);
+      border-radius: 10px;
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 14px;
+    }
+
+    p { color: var(--text-secondary); margin-bottom: 12px; }
+    p:last-child { margin-bottom: 0; }
+
+    ul {
+      list-style: none;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    ul li {
+      color: var(--text-secondary);
+      padding-left: 16px;
+      position: relative;
+    }
+
+    ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--cyan);
+      opacity: 0.5;
+    }
+
+    .highlight {
+      display: inline-block;
+      background: rgba(0,229,255,0.07);
+      border: 1px solid rgba(0,229,255,0.18);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 13px;
+      color: var(--cyan);
+      font-family: monospace;
+    }
+
+    a.inline { color: var(--cyan); text-decoration: none; }
+    a.inline:hover { text-decoration: underline; }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      border-top: 1px solid rgba(0,229,255,0.06);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    footer a { color: var(--cyan); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/">
+    <svg width="28" height="28" viewBox="0 0 52 52" fill="none">
+      <rect x="1" y="1" width="50" height="50" rx="14" fill="#0D1117" stroke="rgba(0,229,255,0.3)" stroke-width="1"/>
+      <path d="M12 14 L22 38 L26 30 L30 38 L40 14" stroke="#00E5FF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="26" cy="30" r="3" fill="#00E5FF"/>
+    </svg>
+    <span class="logo-text"><span class="logo-v">V</span><span class="logo-rest">IAXEN</span></span>
+    <span class="badge">Route Intelligence</span>
+  </a>
+</header>
+
+<main>
+  <h1 class="page-title">Política de Privacidade</h1>
+  <p class="page-meta">Última atualização: 20 de junho de 2026</p>
+
+  <section>
+    <h2>Visão Geral</h2>
+    <p>
+      A VIAXEN é uma ferramenta de planejamento de rotas rodoviárias e estimativa de frete ANTT.
+      Respeitamos sua privacidade: não criamos contas, não armazenamos dados pessoais em servidores
+      e não utilizamos cookies de rastreamento.
+    </p>
+  </section>
+
+  <section>
+    <h2>Dados que NÃO coletamos</h2>
+    <ul>
+      <li>Nome, e-mail ou qualquer dado de identificação pessoal</li>
+      <li>Histórico de rotas — ele existe apenas durante a sessão no navegador e é perdido ao fechar a aba</li>
+      <li>Cookies de rastreamento ou identificadores persistentes</li>
+      <li>Dados de localização do dispositivo</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Métricas de uso (Plausible Analytics)</h2>
+    <p>
+      Utilizamos o <a class="inline" href="https://plausible.io" target="_blank" rel="noopener">Plausible Analytics</a>,
+      uma ferramenta de análise de código aberto e compatível com LGPD/GDPR.
+      O Plausible <strong style="color: var(--text-primary)">não usa cookies</strong> e
+      não coleta dados pessoais identificáveis.
+    </p>
+    <p>Os dados coletados são exclusivamente agregados e anônimos:</p>
+    <ul>
+      <li>Número de acessos à página</li>
+      <li>País/região (derivado do IP, sem armazenamento do IP)</li>
+      <li>Tipo de dispositivo e navegador</li>
+      <li>Eventos de uso: cálculo de rota, exportação de CSV, seleção de alternativas</li>
+    </ul>
+    <p style="margin-top: 12px;">
+      Nenhuma dessas informações permite identificar você individualmente.
+      Saiba mais em <a class="inline" href="https://plausible.io/data-policy" target="_blank" rel="noopener">plausible.io/data-policy</a>.
+    </p>
+  </section>
+
+  <section>
+    <h2>Serviços de terceiros</h2>
+    <p>Para o funcionamento da plataforma, utilizamos:</p>
+    <ul>
+      <li>
+        <strong style="color: var(--text-primary)">OSRM</strong> — cálculo de rotas.
+        Os endereços buscados são enviados ao serviço para obtenção de rotas, mas não são armazenados pela VIAXEN.
+        <a class="inline" href="https://project-osrm.org" target="_blank" rel="noopener">project-osrm.org</a>
+      </li>
+      <li>
+        <strong style="color: var(--text-primary)">Nominatim / OpenStreetMap</strong> — geocodificação de endereços.
+        <a class="inline" href="https://nominatim.org/release-docs/latest/api/Overview/" target="_blank" rel="noopener">nominatim.org</a>
+      </li>
+      <li>
+        <strong style="color: var(--text-primary)">Tabela ANTT 5820/2019</strong> — arquivo CSV processado localmente no navegador, sem envio para servidores.
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Seus direitos (LGPD)</h2>
+    <p>
+      Como não coletamos dados pessoais, não há dados a acessar, corrigir ou excluir.
+      Se tiver dúvidas ou quiser mais informações, entre em contato:
+      <span class="highlight">contato@viaxen.com.br</span>
+    </p>
+  </section>
+
+  <section>
+    <h2>Alterações nesta política</h2>
+    <p>
+      Eventuais atualizações serão publicadas nesta página com a data de revisão.
+      Mudanças significativas serão comunicadas na interface do produto.
+    </p>
+  </section>
+</main>
+
+<footer>
+  <a href="/">← Voltar para VIAXEN</a>
+  &nbsp;·&nbsp;
+  © 2026 VIAXEN · Route Intelligence Platform
+</footer>
+
+</body>
+</html>

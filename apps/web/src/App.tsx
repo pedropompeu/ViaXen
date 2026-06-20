@@ -539,9 +539,19 @@ function App() {
             <span style={{ fontFamily: 'var(--font-display)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: 'var(--vx-text-muted)' }}>ANTT Carregada</span>
           </div>
         </div>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--vx-text-muted)', letterSpacing: '0.05em' }}>
-          © 2026 VIAXEN · Route Intelligence Platform
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--vx-text-muted)', letterSpacing: '0.05em' }}>
+            © 2026 VIAXEN · Route Intelligence Platform
+          </span>
+          <a
+            href="/privacidade.html"
+            style={{ fontFamily: 'var(--font-mono)', fontSize: 10, color: 'var(--vx-text-muted)', letterSpacing: '0.05em', textDecoration: 'none' }}
+            onMouseEnter={e => (e.currentTarget.style.color = 'var(--vx-cyan)')}
+            onMouseLeave={e => (e.currentTarget.style.color = 'var(--vx-text-muted)')}
+          >
+            Privacidade
+          </a>
+        </div>
       </footer>
     </div>
   )
