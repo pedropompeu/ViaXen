@@ -30,7 +30,7 @@ export function Topbar({ historyCount, onExport, onReapply }: TopbarProps) {
       className="vx-topbar"
       style={{
         height: 52, flexShrink: 0,
-        position: 'sticky', top: 0, zIndex: 200,
+        position: 'sticky', top: 0, zIndex: 1100,
         background: 'var(--vx-surface)',
         borderBottom: '1px solid var(--vx-cyan-border)',
         boxShadow: '0 1px 4px rgba(120,85,35,0.08)',
