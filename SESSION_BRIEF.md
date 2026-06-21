@@ -20,8 +20,8 @@
 ```
 Sprint 0  ✅ Analytics (Plausible) + Política de privacidade
 Sprint 1  ✅ PWA pronto — aguardando ação manual: Package For Stores no pwabuilder.com
-Sprint 2  → Supabase: auth opcional + histórico persistido
-Sprint 3  → Freemium + migrar OSRM/Nominatim (APIs públicas têm restrição comercial)
+Sprint 2  ✅ Supabase: auth Google OAuth + histórico persistido (concluído 2026-06-21)
+Sprint 3  → Freemium + migrar OSRM/Nominatim + consentimento LGPD histórico
 Sprint 4  ✅ Componentizar App.tsx (560 → 82 linhas) — antecipado em 2026-06-20
 ```
 
@@ -65,6 +65,60 @@ Sprint 4  ✅ Componentizar App.tsx (560 → 82 linhas) — antecipado em 2026-0
 - `iarc_rating_id` — gerado pelo Play Console durante submissão
 - `scope_extensions`, `file_handlers`, `protocol_handlers` — não aplicáveis ao produto atual
 
+## Sprint 2 — CONCLUÍDO (2026-06-21)
+
+### O que foi entregue
+
+- **Auth Google OAuth** via Supabase — `AuthContext` + `AuthButton` + `signInWithGoogle`
+- **Histórico de rotas** persistido no Supabase (tabela `route_history`) — só para usuários logados, salvo automaticamente após calcular rota
+- **Fix z-index** — Topbar elevada de `200` → `1100` para avatar não ficar atrás do mapa Leaflet (`zIndex: 1000`)
+
+### Infraestrutura configurada (não repetir verificações)
+
+| Item | Estado | Detalhe |
+|------|--------|---------|
+| Supabase project | ✅ Ativo | `lcraxpmfyzpjmbszdzyp.supabase.co` |
+| Google OAuth provider | ✅ Ativo no Supabase | Authentication → Providers → Google |
+| Google OAuth Client | ✅ Criado | Client ID: `669110886063-7v739fgsvhm50e6pd0p8o699avb4eqbq.apps.googleusercontent.com` |
+| Redirect URI | ✅ Configurado | `https://lcraxpmfyzpjmbszdzyp.supabase.co/auth/v1/callback` |
+| Tabela `route_history` | ✅ Existe | Testado — responde `[]` para usuário sem rotas |
+| Env vars Vercel | ✅ Todas 3 envs | `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` em Production, Preview (sprint-2) e Development |
+| `.env.local` | ✅ Sincronizado | `apps/web/.env.local` — gerado via `vercel env pull` |
+| Vercel link | ✅ Linkado | `.vercel/project.json` presente — projeto `pedro-pompeus-projects/via-xen` |
+| Branch | ✅ Pushed | `sprint-2` — `main` na versão 1, sem merge |
+
+### Como rodar localmente
+
+```bash
+cd apps/web && pnpm dev   # sobe em http://localhost:5173
+```
+
+### LGPD — adiado para Sprint 3
+
+O histórico é salvo automaticamente ao calcular rota (sem aviso de consentimento). Decisão: implementar banner/modal de consentimento na Sprint 3.
+
+### Arquivos novos da Sprint 2
+
+| Arquivo | O que tem |
+|---------|-----------|
+| `apps/web/src/context/AuthContext.tsx` | Provider de auth — `user`, `signInWithGoogle`, `signOut` |
+| `apps/web/src/components/AuthButton.tsx` | Botão Entrar / avatar + dropdown + histórico |
+| `apps/web/src/components/HistoryPanel.tsx` | Drawer lateral com histórico de rotas |
+| `apps/web/src/services/supabase.ts` | `createClient` — retorna `null` se env vars ausentes |
+| `apps/web/src/services/history.ts` | `saveRoute`, `loadHistory`, `deleteHistoryEntry` |
+
+---
+
+## Sprint 3 — PRÓXIMA
+
+**Escopo planejado:**
+1. Migrar OSRM → API sem restrição comercial (Valhalla ou GraphHopper)
+2. Migrar Nominatim → Photon ou similar (restrição comercial)
+3. Freemium: limitar cálculos para não-logados
+4. Consentimento LGPD para persistência do histórico
+
+---
+
 ## Sprint 4 — CONCLUÍDO ANTECIPADO (2026-06-20)
 
 - **Componentização do App.tsx**: 560 → 82 linhas
@@ -74,7 +128,7 @@ Sprint 4  ✅ Componentizar App.tsx (560 → 82 linhas) — antecipado em 2026-0
 ## Riscos Ativos
 
 - OSRM e Nominatim proíbem uso comercial em escala → resolver no Sprint 3
-- LGPD: persistência de histórico exige consentimento explícito → Sprint 2
+- LGPD: persistência de histórico exige consentimento explícito → Sprint 3 (adiado)
 - `assetlinks.json` com SHA-256 placeholder → TWA não verifica até ser preenchido após APK
 
 ## Métricas de Sucesso (revisão: 2026-08-20)
@@ -88,7 +142,12 @@ Sprint 4  ✅ Componentizar App.tsx (560 → 82 linhas) — antecipado em 2026-0
 | Arquivo | O que tem |
 |---------|-----------|
 | `apps/web/src/App.tsx` | Orquestrador (82 linhas) + handlers share_target e shortcuts |
-| `apps/web/src/components/` | 8 componentes com Lucide Icons e tokens XENITH |
+| `apps/web/src/context/AuthContext.tsx` | Auth — `user`, `signInWithGoogle`, `signOut` via Supabase |
+| `apps/web/src/components/AuthButton.tsx` | Botão Entrar / avatar + dropdown + abre HistoryPanel |
+| `apps/web/src/components/HistoryPanel.tsx` | Drawer histórico de rotas (Supabase) |
+| `apps/web/src/services/supabase.ts` | `createClient` — null se sem env vars |
+| `apps/web/src/services/history.ts` | CRUD `route_history` no Supabase |
+| `apps/web/src/components/` | 10 componentes com Lucide Icons e tokens XENITH |
 | `apps/web/src/index.css` | Tokens CSS XENITH + WCAG AA + focus-visible |
 | `apps/web/src/context/RouteContext.tsx` | Estado global + sharedText para share_target |
 | `apps/web/src/services/routing.ts` | Integração OSRM |
