@@ -185,19 +185,37 @@
     <h2>Visão Geral</h2>
     <p>
       A VIAXEN é uma ferramenta de planejamento de rotas rodoviárias e estimativa de frete ANTT.
-      Respeitamos sua privacidade: não criamos contas, não armazenamos dados pessoais em servidores
-      e não utilizamos cookies de rastreamento.
+      Respeitamos sua privacidade e não utilizamos cookies de rastreamento.
+      O uso básico da plataforma não requer cadastro — mas oferecemos login opcional para salvar seu histórico de rotas entre dispositivos.
     </p>
   </section>
 
   <section>
-    <h2>Dados que NÃO coletamos</h2>
+    <h2>Uso sem conta (padrão)</h2>
+    <p>Sem login, nenhum dado pessoal é coletado ou armazenado em servidores:</p>
     <ul>
-      <li>Nome, e-mail ou qualquer dado de identificação pessoal</li>
-      <li>Histórico de rotas — ele existe apenas durante a sessão no navegador e é perdido ao fechar a aba</li>
+      <li>Histórico de rotas — existe apenas durante a sessão no navegador e é perdido ao fechar a aba</li>
       <li>Cookies de rastreamento ou identificadores persistentes</li>
       <li>Dados de localização do dispositivo</li>
     </ul>
+  </section>
+
+  <section>
+    <h2>Conta e histórico de rotas (opcional)</h2>
+    <p>
+      Ao optar por fazer login com o Google, os seguintes dados são coletados e armazenados em nossos servidores
+      (<a class="inline" href="https://supabase.com" target="_blank" rel="noopener">Supabase</a>, infraestrutura na AWS us-east-1):
+    </p>
+    <ul>
+      <li><strong style="color: var(--text-primary)">Identificação Google</strong> — e-mail e nome, usados apenas para autenticação</li>
+      <li><strong style="color: var(--text-primary)">Histórico de rotas</strong> — origem (texto), destino (texto), distância em km, duração estimada e data/hora do cálculo</li>
+    </ul>
+    <p style="margin-top: 12px;">
+      <strong style="color: var(--text-primary)">Finalidade:</strong> permitir que você acesse seu histórico de rotas em qualquer dispositivo.<br>
+      <strong style="color: var(--text-primary)">Retenção:</strong> os dados são mantidos enquanto sua conta existir. Você pode excluir entradas individuais dentro do app ou solicitar exclusão completa pelo e-mail abaixo.<br>
+      <strong style="color: var(--text-primary)">Isolamento:</strong> seus dados de rota são tecnicamente isolados e inacessíveis a outros usuários (Row Level Security no banco de dados).<br>
+      <strong style="color: var(--text-primary)">Não compartilhamos</strong> seu histórico com terceiros.
+    </p>
   </section>
 
   <section>
@@ -231,8 +249,8 @@
         <a class="inline" href="https://project-osrm.org" target="_blank" rel="noopener">project-osrm.org</a>
       </li>
       <li>
-        <strong style="color: var(--text-primary)">Nominatim / OpenStreetMap</strong> — geocodificação de endereços.
-        <a class="inline" href="https://nominatim.org/release-docs/latest/api/Overview/" target="_blank" rel="noopener">nominatim.org</a>
+        <strong style="color: var(--text-primary)">Photon (Komoot) / OpenStreetMap</strong> — autocomplete e geocodificação de endereços.
+        <a class="inline" href="https://photon.komoot.io" target="_blank" rel="noopener">photon.komoot.io</a>
       </li>
       <li>
         <strong style="color: var(--text-primary)">Tabela ANTT 5820/2019</strong> — arquivo CSV processado localmente no navegador, sem envio para servidores.

@@ -1,8 +1,10 @@
 import { Download } from 'lucide-react'
+import { AuthButton } from './AuthButton'
 
 interface TopbarProps {
   historyCount: number
   onExport: () => void
+  onReapply: (origin: string, destination: string) => void
 }
 
 function VNodeIcon() {
@@ -22,7 +24,7 @@ function VNodeIcon() {
   )
 }
 
-export function Topbar({ historyCount, onExport }: TopbarProps) {
+export function Topbar({ historyCount, onExport, onReapply }: TopbarProps) {
   return (
     <header
       className="vx-topbar"
@@ -99,6 +101,8 @@ export function Topbar({ historyCount, onExport }: TopbarProps) {
         <Download size={14} strokeWidth={1.5} />
         <span className="vx-topbar-export-label">Exportar CSV</span>
       </button>
+
+      <AuthButton onReapply={onReapply} />
     </header>
   )
 }

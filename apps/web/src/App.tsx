@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { Map } from './components/Map'
 import { Topbar } from './components/Topbar'
 import { ErrorToast } from './components/ErrorToast'
@@ -9,15 +9,18 @@ import { KpiCards } from './components/KpiCards'
 import { AppFooter } from './components/AppFooter'
 import { InstallBanner } from './components/InstallBanner'
 import { useRoute } from './context/RouteContext'
+import { useAuth } from './context/AuthContext'
 import { useStops } from './hooks/useStops'
 import { useRouteCalculator } from './hooks/useRouteCalculator'
 import { useInstallPrompt } from './hooks/useInstallPrompt'
 import { initDuckDB } from './services/duckdb'
+import { saveRoute } from './services/history'
 import './App.css'
 
 function App() {
   const { state, dispatch } = useRoute()
   const { origin, destination, routeOptions, selectedRouteIdx, route, freights, history, error } = state
+  const { user } = useAuth()
 
   const { stopSlots, addStop, removeStop, setStop } = useStops()
   const { handleCalculateRoute, handleSelectRoute, handleExport } = useRouteCalculator(stopSlots)
@@ -33,19 +36,14 @@ function App() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
 
-    // share_target: endereço compartilhado de outro app (Google Maps, WhatsApp etc.)
     const shared = params.get('text') || params.get('title') || params.get('url')
-    if (shared) {
-      dispatch({ type: 'SET_SHARED_TEXT', payload: shared.trim() })
-    }
+    if (shared) dispatch({ type: 'SET_SHARED_TEXT', payload: shared.trim() })
 
-    // shortcuts: ações rápidas do menu de contexto do app instalado
     const acao = params.get('acao')
     if (acao === 'nova-rota') {
       dispatch({ type: 'SET_ORIGIN', payload: null })
       dispatch({ type: 'SET_DESTINATION', payload: null })
     } else if (acao === 'frete') {
-      // Rola até a seção de frete após o app montar
       setTimeout(() => {
         document.getElementById('freight-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
       }, 300)
@@ -53,6 +51,25 @@ function App() {
 
     if (shared || acao) window.history.replaceState({}, '', '/')
   }, [])
+
+  // Salva rota no histórico Supabase quando usuário está logado e rota é calculada
+  useEffect(() => {
+    if (!user || !route || !origin || !destination) return
+    const distKm = route.distance ? route.distance / 1000 : null
+    const durMin = route.duration ? Math.round(route.duration / 60) : null
+    saveRoute({
+      origin: origin.label,
+      destination: destination.label,
+      distance_km: distKm,
+      duration_min: durMin,
+    })
+  }, [route])
+
+  // Reaplicar rota do histórico — preenche origem e destino
+  const handleReapply = useCallback((originLabel: string, destinationLabel: string) => {
+    dispatch({ type: 'SET_ORIGIN', payload: { label: originLabel, lat: 0, lng: 0 } })
+    dispatch({ type: 'SET_DESTINATION', payload: { label: destinationLabel, lat: 0, lng: 0 } })
+  }, [dispatch])
 
   const routeOptionsGeom = routeOptions.map(r =>
     r.geometry.coordinates.map((c: number[]) => [c[1], c[0]] as [number, number])
@@ -67,7 +84,11 @@ function App() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-body)' }}>
-      <Topbar historyCount={history.length} onExport={handleExport} />
+      <Topbar
+        historyCount={history.length}
+        onExport={handleExport}
+        onReapply={handleReapply}
+      />
 
       {error && (
         <ErrorToast

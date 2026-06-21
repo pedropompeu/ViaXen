@@ -11,6 +11,10 @@ function track(event: string, props?: Record<string, string | number | boolean>)
   window.plausible?.(event, props ? { props } : undefined)
 }
 
+export function trackEvent(event: string, props?: Record<string, string | number | boolean>) {
+  track(event, props)
+}
+
 export const analytics = {
   calcularRota(params: { eixos: number; paradas: number; sucesso: boolean }) {
     track('calcular-rota', params)
@@ -23,5 +27,8 @@ export const analytics = {
   },
   adicionarParada() {
     track('adicionar-parada')
+  },
+  login(provider: string) {
+    track('login', { provider })
   },
 }
